@@ -69,7 +69,7 @@ and you will probably want to configure a standard web server to sit
 in front of Postpass, for example Apache:
 
     <VirtualHost *:80>
-      ServerName my.postpass.server
+      ServerName postpass.example.com
 
       DocumentRoot /var/www/html
 
