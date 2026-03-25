@@ -21,7 +21,7 @@ docs on the instance of this software at `postpass.geofabrik.de`.
 
 A simple
 
-    go build -o postpass-server postpass/main.go
+    go build -o postpass-server cmd/postpass/main.go
 
 should do the trick.
 
