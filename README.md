@@ -43,7 +43,9 @@ else you'll have random people on the Internet doing the "little bobby tables"
 joke on you:
 
     create user readonly with password 'readonly';
-    grant select on all tables in schema public to readonly;
+    grant usage on schema public to readonly;
+    grant select on all tables in schema public to readonly ;
+    alter default privileges in schema public grant select on tables to readonly;
 
 You could now start the Postpass software manually (it will listen on
 its own port, by default 8081); for a halfway reliable production environment
