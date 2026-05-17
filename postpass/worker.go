@@ -63,10 +63,11 @@ func Worker(db *sql.DB, id int, tasks <-chan WorkItem) {
         }
         _ = rows.Close()
 
-        builder.WriteString("{ ")
+        builder.WriteString("{ \n")
         builder.WriteString(`"postpass_properties": { "generator": "Postpass API 0.2", "timestamp": "`)
         builder.WriteString(res)
         builder.WriteString(`"}, `)
+        builder.WriteString("\n")
         if task.geojson {
             builder.WriteString(`"type": "FeatureCollection", "features" : [ `)
             jsonfunc = "ST_AsGeoJSON"
@@ -74,6 +75,7 @@ func Worker(db *sql.DB, id int, tasks <-chan WorkItem) {
             builder.WriteString(`"result" : [ `)
             jsonfunc = "row_to_json"
         }
+        builder.WriteString("\n")
 
         rows, err = db.QueryContext(taskCtx, fmt.Sprintf(
             `SELECT %s(t.*) FROM (%s) as t;`, jsonfunc, task.request))
@@ -88,14 +90,14 @@ func Worker(db *sql.DB, id int, tasks <-chan WorkItem) {
             }
             builder.WriteString(comma)
             builder.WriteString(line)
-            comma = ","
+            comma = ",\n"
         }
 
         if err != nil {
             goto sqlerror
         }
 
-        builder.WriteString("]}")
+        builder.WriteString("\n]}")
         res = builder.String()
 
 		// discard result
