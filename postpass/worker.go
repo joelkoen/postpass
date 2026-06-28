@@ -20,7 +20,6 @@ var Idle [4]atomic.Int64
  * arguments: database connection, worker id, channel to read jobs from
  */
 func Worker(db *sql.DB, id int, tasks <-chan WorkItem) {
-	var res string
 	Idle[id/100].Add(1)
 
 	// reads job from channel
@@ -45,6 +44,7 @@ func Worker(db *sql.DB, id int, tasks <-chan WorkItem) {
         // A separate query is therefore needed to access the 
         // metadata.
 
+	var res string = ""
         var builder strings.Builder
         var comma string
         var line string
@@ -56,10 +56,13 @@ func Worker(db *sql.DB, id int, tasks <-chan WorkItem) {
         if err != nil {
             goto sqlerror
         }
-        rows.Next()
-        err = rows.Scan(&res)
-        if err != nil {
-            goto sqlerror
+
+        // if no rows are returned, no replication_timestamp has been set.
+        if (rows.Next()) {
+            err = rows.Scan(&res)
+            if err != nil {
+                goto sqlerror
+            }
         }
         _ = rows.Close()
 
