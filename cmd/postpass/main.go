@@ -29,8 +29,8 @@ func main() {
 	log.SetFlags(0)
 
 	// open a connection to the database
-	connStr := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable options='-c statement_timeout=36000000'",
-		postpass.Host, postpass.Port, postpass.User, postpass.Password, postpass.DBName)
+	connStr := fmt.Sprintf("host=%s dbname=%s sslmode=disable options='-c statement_timeout=36000000'",
+		postpass.Host, postpass.DBName)
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		log.Fatal(err)
